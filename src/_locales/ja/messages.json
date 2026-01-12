@@ -785,9 +785,6 @@
   "amazonUrl": {
     "message": ""
   },
-  "addonUrl": {
-    "message": "https://github.com/JustNotesa/TabBoard"
-  },
   "replacedPageMessage": {
     "message": "このページはTabBoard - Fork of Tab Session Managerでは開けません。"
   },

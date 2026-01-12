@@ -785,9 +785,6 @@
   "amazonUrl": {
     "message": ""
   },
-  "addonUrl": {
-    "message": "https://github.com/JustNotesa/TabBoard"
-  },
   "replacedPageMessage": {
     "message": "Trang này không thể mở được bởi TabBoard - Fork of Tab Session Manager."
   },
