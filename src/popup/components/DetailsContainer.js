@@ -219,7 +219,11 @@ const TabContainer = props => {
         </div>
         <div className="tabTileInfo">
           <span className="tabTitle">
-            <Highlighter searchWords={searchWords} textToHighlight={tab.title || ""} autoEscape={true} />
+            <Highlighter
+              searchWords={searchWords}
+              textToHighlight={tab.title || ""}
+              autoEscape={true}
+            />
           </span>
           <span className="tabUrl">{tab.url}</span>
         </div>
@@ -239,7 +243,11 @@ const TabContainer = props => {
       >
         <FavIcon favIconUrl={tab.favIconUrl} />
         <span className="tabTitle">
-          <Highlighter searchWords={searchWords} textToHighlight={tab.title || ""} autoEscape={true} />
+          <Highlighter
+            searchWords={searchWords}
+            textToHighlight={tab.title || ""}
+            autoEscape={true}
+          />
         </span>
       </button>
       <div className="buttonsContainer">
@@ -281,7 +289,7 @@ class WindowContainer extends Component {
     window.removeEventListener("resize", this.handleResize);
   }
 
-  setTabsRef = (node) => {
+  setTabsRef = node => {
     this.tabsContainer = node;
     this.updateToolbarSide();
   };
@@ -332,7 +340,13 @@ class WindowContainer extends Component {
       return;
     }
     const position = this.state.dragPosition || "before";
-    this.props.handleReorderTab?.(sourceWindowId || targetWindowId, targetWindowId, draggingTabId, tabId, position);
+    this.props.handleReorderTab?.(
+      sourceWindowId || targetWindowId,
+      targetWindowId,
+      draggingTabId,
+      tabId,
+      position
+    );
     this.resetDragState();
     clearTabDragState();
   };
@@ -360,7 +374,13 @@ class WindowContainer extends Component {
       this.resetDragState();
       return;
     }
-    this.props.handleReorderTab?.(sourceWindowId || targetWindowId, targetWindowId, draggingTabId, null, "after");
+    this.props.handleReorderTab?.(
+      sourceWindowId || targetWindowId,
+      targetWindowId,
+      draggingTabId,
+      null,
+      "after"
+    );
     this.resetDragState();
     clearTabDragState();
   };
@@ -379,13 +399,13 @@ class WindowContainer extends Component {
     if (!this.tabsContainer) return;
     const tiles = Array.from(this.tabsContainer.querySelectorAll(".tabTile"));
     if (!tiles.length) return;
-    tiles.forEach((tile) => tile.classList.remove("isToolbarLeft"));
+    tiles.forEach(tile => tile.classList.remove("isToolbarLeft"));
     if (this.props.viewMode !== "grid") return;
 
     const containerRect = this.tabsContainer.getBoundingClientRect();
     if (!containerRect.width) return;
 
-    const tileData = tiles.map((tile) => {
+    const tileData = tiles.map(tile => {
       const wrapper = tile.querySelector(".thumbnailWrapper");
       const rect = wrapper ? wrapper.getBoundingClientRect() : tile.getBoundingClientRect();
       return { tile, rect };
@@ -393,8 +413,8 @@ class WindowContainer extends Component {
 
     const tolerance = 16;
     const rows = [];
-    tileData.forEach((entry) => {
-      const existingRow = rows.find((row) => Math.abs(row.top - entry.rect.top) < tolerance);
+    tileData.forEach(entry => {
+      const existingRow = rows.find(row => Math.abs(row.top - entry.rect.top) < tolerance);
       if (existingRow) {
         existingRow.items.push(entry);
       } else {
@@ -403,14 +423,14 @@ class WindowContainer extends Component {
     });
 
     const toolbarRightEdge = containerRect.right - 52;
-    rows.forEach((row) => {
-      const furthest = row.items.reduce((current, candidate) =>
-        candidate.rect.right > current.rect.right ? candidate : current,
+    rows.forEach(row => {
+      const furthest = row.items.reduce(
+        (current, candidate) => (candidate.rect.right > current.rect.right ? candidate : current),
         row.items[0]
       );
       const shouldFlip = furthest.rect.right > toolbarRightEdge;
       furthest.tile.classList.toggle("isToolbarLeft", shouldFlip);
-      row.items.forEach((entry) => {
+      row.items.forEach(entry => {
         entry.tile.dataset.toolbarRow = Math.round(furthest.rect.top);
       });
     });
@@ -464,7 +484,8 @@ class WindowContainer extends Component {
     const sortedTabs = Object.values(tabs).sort((a, b) => a.index - b.index);
     const isIncognito = Object.values(tabs)[0].incognito;
     const tabsContainerClass = `tabs ${viewMode === "grid" ? "isGrid" : ""}`;
-    const tabsStyle = viewMode === "grid" ? { "--thumbnail-columns": `${thumbnailSize}` } : undefined;
+    const tabsStyle =
+      viewMode === "grid" ? { "--thumbnail-columns": `${thumbnailSize}` } : undefined;
 
     return (
       <div className={`windowContainer ${this.state.isCollapsed ? "isCollapsed" : ""}`}>
@@ -474,17 +495,24 @@ class WindowContainer extends Component {
               <CollapseIcon />
             </button>
             <div className="windowIcon">
-              {isIncognito ?
-                browserInfo().name === "Chrome" ? <WindowIncognitoChromeIcon /> : <WindowIncognitoFirefoxIcon /> :
+              {isIncognito ? (
+                browserInfo().name === "Chrome" ? (
+                  <WindowIncognitoChromeIcon />
+                ) : (
+                  <WindowIncognitoFirefoxIcon />
+                )
+              ) : (
                 <WindowIcon />
-              }
+              )}
             </div>
             <button
               className="windowTitle"
               onClick={this.handleOpenClick}
               title={browser.i18n.getMessage("openInNewWindowLabel")}
             >
-              {windowTitle || Object.values(tabs).find(tab => tab.active)?.title || browser.i18n.getMessage("windowLabel")}
+              {windowTitle ||
+                Object.values(tabs).find(tab => tab.active)?.title ||
+                browser.i18n.getMessage("windowLabel")}
             </button>
             <span className="tabsNumber">{this.getTabsNumberText()}</span>
           </div>

@@ -27,11 +27,11 @@ export default props => {
                   ))}
                 </ul>
               )}
-              < hr />
+              <hr />
             </OptionContainer>
           ))}
         </ul>
       </fieldset>
-    </li >
+    </li>
   );
 };

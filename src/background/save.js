@@ -23,10 +23,12 @@ const DEFAULT_THUMBNAIL_SOURCE = "screenshot";
 
 const ensureOffscreenDocument = async () => {
   if (!browser?.offscreen) return;
-  const existing = await browser.runtime.getContexts?.({
-    contextTypes: ["OFFSCREEN_DOCUMENT"],
-    documentUrls: [browser.runtime.getURL("offscreen/index.html")]
-  }).catch(() => []);
+  const existing = await browser.runtime
+    .getContexts?.({
+      contextTypes: ["OFFSCREEN_DOCUMENT"],
+      documentUrls: [browser.runtime.getURL("offscreen/index.html")]
+    })
+    .catch(() => []);
 
   if (existing && existing.length > 0) return;
 
@@ -106,7 +108,10 @@ const findRepresentativeImageUrl = (html, baseUrl) => {
   ];
 
   for (const selector of META_SELECTORS) {
-    const regex = new RegExp(`<meta[^>]+${selector.attribute}\\s*=\\s*(["'])${selector.value}\\1[^>]*>`, "i");
+    const regex = new RegExp(
+      `<meta[^>]+${selector.attribute}\\s*=\\s*(["'])${selector.value}\\1[^>]*>`,
+      "i"
+    );
     const match = html.match(regex);
     if (match) {
       const content = extractAttributeValue(match[0], "content");
@@ -187,7 +192,7 @@ const captureScreenshotBlob = async (tab, windowStateMap) => {
     const canUseDirectCapture = manifestVersion < 3;
 
     const state = windowStateMap ? await ensureWindowState(tab, windowStateMap) : null;
-    await browser.windows.update(tab.windowId, { focused: true }).catch(() => { });
+    await browser.windows.update(tab.windowId, { focused: true }).catch(() => {});
     if (state && state.lastActiveTabId !== tab.id) {
       await browser.tabs.update(tab.id, { active: true });
       state.lastActiveTabId = tab.id;
@@ -217,14 +222,22 @@ const captureScreenshotBlob = async (tab, windowStateMap) => {
             try {
               chromeTabs.captureVisibleTab(tab.windowId, { format: "png" }, result => {
                 if (chrome.runtime?.lastError) {
-                  log.debug(logDir, "captureScreenshotBlob() chrome.captureVisibleTab error", chrome.runtime.lastError.message);
+                  log.debug(
+                    logDir,
+                    "captureScreenshotBlob() chrome.captureVisibleTab error",
+                    chrome.runtime.lastError.message
+                  );
                   resolve(null);
                 } else {
                   resolve(result);
                 }
               });
             } catch (chromeError) {
-              log.warn(logDir, "captureScreenshotBlob() chrome.captureVisibleTab threw", chromeError);
+              log.warn(
+                logDir,
+                "captureScreenshotBlob() chrome.captureVisibleTab threw",
+                chromeError
+              );
               resolve(null);
             }
           });
@@ -240,18 +253,21 @@ const captureScreenshotBlob = async (tab, windowStateMap) => {
     }
 
     await ensureOffscreenDocument();
-    const response = await browser.runtime.sendMessage({
-      message: "offscreen_captureTab",
-      tabId: tab.id,
-      windowId: tab.windowId,
-      format: "png"
-    }).catch(error => {
-      log.warn(logDir, "captureScreenshotBlob() message failed", error);
-      return null;
-    });
+    const response = await browser.runtime
+      .sendMessage({
+        message: "offscreen_captureTab",
+        tabId: tab.id,
+        windowId: tab.windowId,
+        format: "png"
+      })
+      .catch(error => {
+        log.warn(logDir, "captureScreenshotBlob() message failed", error);
+        return null;
+      });
 
     if (!response?.success || !response?.dataUrl) {
-      if (response?.error) log.debug(logDir, "captureScreenshotBlob() offscreen error", response.error);
+      if (response?.error)
+        log.debug(logDir, "captureScreenshotBlob() offscreen error", response.error);
 
       // Fallback to direct capture if offscreen isn’t available yet (e.g., Firefox MV2)
       const fallbackDataUrl = await captureDirectly();
@@ -280,7 +296,8 @@ const generateAssetsForTab = async (
     thumbnailType: null
   };
 
-  const { captureAssets: shouldCaptureAssets = true, thumbnailSource = imagePreference } = options || {};
+  const { captureAssets: shouldCaptureAssets = true, thumbnailSource = imagePreference } =
+    options || {};
   const isCaptureSupported = isSupportedForCapture(tab.url);
 
   if (tab.incognito) {
@@ -347,9 +364,18 @@ const generateAssetsForTab = async (
     });
     assets.thumbnailId = thumbnailId;
     assets.thumbnailType = thumbnailType;
-    log.info(logDir, "generateAssetsForTab() saved thumbnail", { sessionId, tabId: sessionTabId, type: thumbnailType });
+    log.info(logDir, "generateAssetsForTab() saved thumbnail", {
+      sessionId,
+      tabId: sessionTabId,
+      type: thumbnailType
+    });
   } else {
-    log.debug(logDir, "generateAssetsForTab() no thumbnail", { sessionId, tabId: sessionTabId, preference: thumbnailSource, captureAssets: shouldCaptureAssets });
+    log.debug(logDir, "generateAssetsForTab() no thumbnail", {
+      sessionId,
+      tabId: sessionTabId,
+      preference: thumbnailSource,
+      captureAssets: shouldCaptureAssets
+    });
   }
 
   return assets;
@@ -450,26 +476,33 @@ export async function loadCurrentSession(name, tag, property, options = {}) {
 
   if (isEnabledTabGroups && getSettings("saveTabGroupsV2")) {
     // ポップアップやPWAにはタブ自体が存在しないので、normalタイプのウィンドウのみクエリする
-    const filteredWindows = Object.values(session.windowsInfo).filter(window => window.type === "normal");
-    const tabGroups = await Promise.all(filteredWindows.map(window => queryTabGroups({
-      windowId: window.id,
-    })));
-    const filteredTabGroups = tabGroups.flat().filter(tabGroup =>
-      Object.keys(session.windows).includes(String(tabGroup.windowId)));
+    const filteredWindows = Object.values(session.windowsInfo).filter(
+      window => window.type === "normal"
+    );
+    const tabGroups = await Promise.all(
+      filteredWindows.map(window =>
+        queryTabGroups({
+          windowId: window.id
+        })
+      )
+    );
+    const filteredTabGroups = tabGroups
+      .flat()
+      .filter(tabGroup => Object.keys(session.windows).includes(String(tabGroup.windowId)));
     if (filteredTabGroups.length > 0) session.tabGroups = filteredTabGroups;
   }
 
   const filteredSession = ignoreUrls(session);
   const { removedThumbnails, removedOfflineIds } = getRemovedAssetIds(session, filteredSession);
-  await Promise.all([
-    deleteThumbnails(removedThumbnails),
-    deleteOfflinePages(removedOfflineIds)
-  ]);
+  await Promise.all([deleteThumbnails(removedThumbnails), deleteOfflinePages(removedOfflineIds)]);
 
   filteredSession.windowsNumber = Object.keys(filteredSession.windows).length;
-  filteredSession.tabsNumber = Object.values(filteredSession.windows).reduce((count, windowTabs) => {
-    return count + Object.keys(windowTabs).length;
-  }, 0);
+  filteredSession.tabsNumber = Object.values(filteredSession.windows).reduce(
+    (count, windowTabs) => {
+      return count + Object.keys(windowTabs).length;
+    },
+    0
+  );
 
   return new Promise((resolve, reject) => {
     if (filteredSession.tabsNumber > 0) resolve(filteredSession);
@@ -483,7 +516,7 @@ async function sendMessage(message, options = {}) {
       message: message,
       ...options
     })
-    .catch(() => { });
+    .catch(() => {});
 }
 
 export async function saveSession(session, isSendResponce = true, saveBySync = false) {
@@ -550,7 +583,7 @@ export async function updateSession(
 
 export async function renameSession(id, name) {
   log.log(logDir, "renameSession()", id, name);
-  let session = await Sessions.get(id).catch(() => { });
+  let session = await Sessions.get(id).catch(() => {});
   if (session == undefined) return;
   session.name = name.trim();
   return await updateSession(session);
@@ -566,12 +599,18 @@ export async function deleteAllSessions() {
   }
 }
 
-export const captureAssetsForLiveTab = async (sessionId, tabId, overrideTabId = null, options = {}) => {
+export const captureAssetsForLiveTab = async (
+  sessionId,
+  tabId,
+  overrideTabId = null,
+  options = {}
+) => {
   log.log(logDir, "captureAssetsForLiveTab()", sessionId, tabId, overrideTabId, options);
   try {
     const tab = await browser.tabs.get(tabId);
     const imagePreference = options.thumbnailSource || DEFAULT_THUMBNAIL_SOURCE;
-    const shouldCaptureScreenshots = options.captureAssets !== false && imagePreference === "screenshot";
+    const shouldCaptureScreenshots =
+      options.captureAssets !== false && imagePreference === "screenshot";
     const windowStateMap = shouldCaptureScreenshots ? new Map() : null;
     const originalFocusedWindowRef = { current: null };
     const assets = await generateAssetsForTab(
@@ -626,7 +665,9 @@ export const getSessionStartTime = async () => {
 
   const localStorage = getLocalStorage();
   if (localStorage) {
-    return (await localStorage.get("sessionStartTimeFallback")).sessionStartTimeFallback || Date.now();
+    return (
+      (await localStorage.get("sessionStartTimeFallback")).sessionStartTimeFallback || Date.now()
+    );
   }
 
   return Date.now();

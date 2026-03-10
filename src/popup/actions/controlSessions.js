@@ -163,13 +163,15 @@ export const addCurrentWindow = async (id, isTracking = false) => {
   for (const tab of currentWindow.tabs) {
     const originalTabId = tab.id;
     const newTabId = updatedTabIdMap[originalTabId];
-    const assets = await browser.runtime.sendMessage({
-      message: "captureLiveTabAssets",
-      sessionId: session.id,
-      tabId: originalTabId,
-      overrideTabId: newTabId,
-      thumbnailSource: thumbnailSource
-    }).catch(() => ({ }));
+    const assets = await browser.runtime
+      .sendMessage({
+        message: "captureLiveTabAssets",
+        sessionId: session.id,
+        tabId: originalTabId,
+        overrideTabId: newTabId,
+        thumbnailSource: thumbnailSource
+      })
+      .catch(() => ({}));
     captureResults[newTabId] = assets || {};
   }
 
@@ -187,7 +189,6 @@ export const addCurrentWindow = async (id, isTracking = false) => {
     if (replacedParams.isReplaced) {
       tab.url = replacedParams.url;
     }
-
 
     // Compress favicon url
     if (tab?.favIconUrl?.startsWith("data:image")) {
@@ -232,18 +233,22 @@ export const addCurrentTab = async (sessionId, windowId) => {
   if (!currentTab) return;
 
   // Set unique tabId
-  const tabIdList = Object.values(session.windows).flatMap(window => Object.values(window).map(tab => tab.id));
+  const tabIdList = Object.values(session.windows).flatMap(window =>
+    Object.values(window).map(tab => tab.id)
+  );
   const maxTabId = Math.max(...tabIdList);
   const newTabId = maxTabId + 1;
 
   const thumbnailSource = DEFAULT_THUMBNAIL_SOURCE;
-  const capturedAssets = await browser.runtime.sendMessage({
-    message: "captureLiveTabAssets",
-    sessionId: sessionId,
-    tabId: currentTab.id,
-    overrideTabId: newTabId,
-    thumbnailSource: thumbnailSource
-  }).catch(() => ({ }));
+  const capturedAssets = await browser.runtime
+    .sendMessage({
+      message: "captureLiveTabAssets",
+      sessionId: sessionId,
+      tabId: currentTab.id,
+      overrideTabId: newTabId,
+      thumbnailSource: thumbnailSource
+    })
+    .catch(() => ({}));
 
   currentTab.id = newTabId;
 
@@ -295,9 +300,7 @@ export const makeCopySession = async id => {
   let session = await getSessions(id);
 
   session.id = uuidv4();
-  session.date = moment(session.date)
-    .add(1, "ms")
-    .valueOf();
+  session.date = moment(session.date).add(1, "ms").valueOf();
   session.lastEditedTime = Date.now();
   browser.runtime.sendMessage({
     message: "save",
