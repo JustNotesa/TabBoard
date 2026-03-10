@@ -30,7 +30,7 @@ const backupIndividualSessions = async () => {
     winClose: browser.i18n.getMessage("winCloseSessionName"),
     userSave: browser.i18n.getMessage("displayUserLabel")
   };
-  const sessions = await Sessions.getAll(["id", "lastEditedTime", "tag"]).catch(() => { });
+  const sessions = await Sessions.getAll(["id", "lastEditedTime", "tag"]).catch(() => {});
 
   for (let session of sessions) {
     if (session.lastEditedTime < lastBackupTime) continue;
@@ -54,7 +54,7 @@ const backupAllSessions = async () => {
   await exportSessions(null, folder, true);
 };
 
-export const resetLastBackupTime = async (changes) => {
+export const resetLastBackupTime = async changes => {
   const oldSettings = changes?.Settings?.oldValue;
   const newSettings = changes?.Settings?.newValue;
   const enabledBackup = !oldSettings?.ifBackup && newSettings?.ifBackup;

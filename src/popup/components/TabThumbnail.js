@@ -70,9 +70,10 @@ export default class TabThumbnail extends Component {
           return;
         }
 
-        const buffer = response.buffer instanceof ArrayBuffer
-          ? response.buffer
-          : new Uint8Array(response.buffer).buffer;
+        const buffer =
+          response.buffer instanceof ArrayBuffer
+            ? response.buffer
+            : new Uint8Array(response.buffer).buffer;
 
         cacheEntry = {
           buffer,

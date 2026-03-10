@@ -57,7 +57,7 @@ const reorderSessionTab = (
   const sourceWindow = updatedSession.windows[sourceWindowId];
   const targetWindow = updatedSession.windows[targetWindowId];
   const sourceTabs = Object.values(sourceWindow).sort((a, b) => a.index - b.index);
-  const sourceIndex = sourceTabs.findIndex((tab) => tab.id === tabId);
+  const sourceIndex = sourceTabs.findIndex(tab => tab.id === tabId);
   if (sourceIndex < 0) {
     return updatedSession;
   }
@@ -75,7 +75,7 @@ const reorderSessionTab = (
     : Object.values(targetWindow).sort((a, b) => a.index - b.index);
   let insertIndex = targetTabs.length;
   if (anchorTabId) {
-    const anchorIndex = targetTabs.findIndex((tab) => tab.id === anchorTabId);
+    const anchorIndex = targetTabs.findIndex(tab => tab.id === anchorTabId);
     if (anchorIndex >= 0) {
       insertIndex = position === "after" ? anchorIndex + 1 : anchorIndex;
     }
@@ -114,7 +114,7 @@ export default class PopupPage extends Component {
         message: "",
         type: "info",
         buttonLabel: "",
-        onClick: () => { }
+        onClick: () => {}
       },
       isBackupEnabled: false,
       syncStatus: {
@@ -197,7 +197,12 @@ export default class PopupPage extends Component {
     const keys = ["id", "name", "date", "tag", "tabsNumber", "windowsNumber", "lastEditedTime"];
     this.port = Math.random();
     browser.runtime.onMessage.addListener(this.handleMessage);
-    browser.runtime.sendMessage({ message: "requestAllSessions", needKeys: keys, count: 30, port: this.port });
+    browser.runtime.sendMessage({
+      message: "requestAllSessions",
+      needKeys: keys,
+      count: 30,
+      port: this.port
+    });
 
     if (this.firstSelectedSessionId) {
       const selectedSession = await getSessions(this.firstSelectedSessionId, keys);
@@ -226,7 +231,6 @@ export default class PopupPage extends Component {
       setSettings("isShowUpdated", false);
     }
     this.showBackupReminder();
-
   };
 
   calcNeedsSync = sessions => {
@@ -251,32 +255,40 @@ export default class PopupPage extends Component {
   };
 
   updateTagList = sessions => {
-    const reservedTags = [
-      "regular",
-      "winClose",
-      "browserExit",
-      "temp",
-      "_startup",
-      "_tracking"
-    ];
-    const allTags = sessions.map(session => session.tag).flat().concat(this.state.tagList);
-    const uniqueTags = Array.from(new Set(allTags)).filter(tag => !reservedTags.includes(tag))
+    const reservedTags = ["regular", "winClose", "browserExit", "temp", "_startup", "_tracking"];
+    const allTags = sessions
+      .map(session => session.tag)
+      .flat()
+      .concat(this.state.tagList);
+    const uniqueTags = Array.from(new Set(allTags))
+      .filter(tag => !reservedTags.includes(tag))
       .sort((a, b) => a.localeCompare(b));
 
     this.setState({ tagList: uniqueTags });
   };
-  normalizeThumbnailColumns = (value) => {
+  normalizeThumbnailColumns = value => {
     const numericValue = Number(value);
     if (!Number.isFinite(numericValue)) {
       return THUMBNAIL_COLUMNS_DEFAULT;
     }
     if (numericValue > THUMBNAIL_COLUMNS_MAX) {
-      const clampedPixels = Math.min(Math.max(numericValue, THUMBNAIL_PIXEL_MIN), THUMBNAIL_PIXEL_MAX);
-      const ratio = (clampedPixels - THUMBNAIL_PIXEL_MIN) / (THUMBNAIL_PIXEL_MAX - THUMBNAIL_PIXEL_MIN);
-      const derivedColumns = THUMBNAIL_COLUMNS_MAX - ratio * (THUMBNAIL_COLUMNS_MAX - THUMBNAIL_COLUMNS_MIN);
-      return Math.min(Math.max(Math.round(derivedColumns), THUMBNAIL_COLUMNS_MIN), THUMBNAIL_COLUMNS_MAX);
+      const clampedPixels = Math.min(
+        Math.max(numericValue, THUMBNAIL_PIXEL_MIN),
+        THUMBNAIL_PIXEL_MAX
+      );
+      const ratio =
+        (clampedPixels - THUMBNAIL_PIXEL_MIN) / (THUMBNAIL_PIXEL_MAX - THUMBNAIL_PIXEL_MIN);
+      const derivedColumns =
+        THUMBNAIL_COLUMNS_MAX - ratio * (THUMBNAIL_COLUMNS_MAX - THUMBNAIL_COLUMNS_MIN);
+      return Math.min(
+        Math.max(Math.round(derivedColumns), THUMBNAIL_COLUMNS_MIN),
+        THUMBNAIL_COLUMNS_MAX
+      );
     }
-    return Math.min(Math.max(Math.round(numericValue), THUMBNAIL_COLUMNS_MIN), THUMBNAIL_COLUMNS_MAX);
+    return Math.min(
+      Math.max(Math.round(numericValue), THUMBNAIL_COLUMNS_MIN),
+      THUMBNAIL_COLUMNS_MAX
+    );
   };
 
   handleViewModeChange = mode => {
@@ -307,15 +319,19 @@ export default class PopupPage extends Component {
         prev.viewMode !== updatedViewMode ||
         prev.thumbnailSize !== updatedSize ||
         prev.hideThumbnailText !== updatedHideText;
-      return shouldUpdate ? {
-        viewMode: updatedViewMode,
-        thumbnailSize: updatedSize,
-        hideThumbnailText: updatedHideText
-      } : null;
+      return shouldUpdate
+        ? {
+            viewMode: updatedViewMode,
+            thumbnailSize: updatedSize,
+            hideThumbnailText: updatedHideText
+          }
+        : null;
     });
 
     const updatedBackupFlag = !!getSettings("ifBackup");
-    this.setState(prev => (prev.isBackupEnabled === updatedBackupFlag ? null : { isBackupEnabled: updatedBackupFlag }));
+    this.setState(prev =>
+      prev.isBackupEnabled === updatedBackupFlag ? null : { isBackupEnabled: updatedBackupFlag }
+    );
   };
 
   showBackupReminder = () => {
@@ -335,7 +351,6 @@ export default class PopupPage extends Component {
       <BackupRecoveryModal closeModal={handleCloseBackupModal} />
     );
   };
-
 
   handleMessage = request => {
     switch (request.message) {
@@ -407,8 +422,7 @@ export default class PopupPage extends Component {
         if (sessionIndex === -1) {
           sessions = this.state.sessions.concat(newSession);
           searchInfo = this.state.searchInfo.concat(newSearchInfo);
-        }
-        else {
+        } else {
           sessions.splice(sessionIndex, 1, newSession);
           searchInfo.splice(infoIndex, 1, newSearchInfo);
         }
@@ -491,7 +505,13 @@ export default class PopupPage extends Component {
     this.searchSessions(searchWord);
     if (isEnter) {
       const { sessions, sortValue, filterValue, searchWords, searchedSessionIds } = this.state;
-      const sortedSessions = getSortedSessions(sessions, sortValue, filterValue, searchWords, searchedSessionIds);
+      const sortedSessions = getSortedSessions(
+        sessions,
+        sortValue,
+        filterValue,
+        searchWords,
+        searchedSessionIds
+      );
       if (sortedSessions.length === 0) return;
       this.selectSession(sortedSessions[0].id);
       this.sessionsAreaElement.current.focus();
@@ -513,7 +533,9 @@ export default class PopupPage extends Component {
       .filter(info => searchWords.every(word => info.tabsTitle.includes(word)))
       .map(info => info.id);
 
-    const searchedSessionIds = Array.from(new Set(matchedIdsBySessionName.concat(matchedIdsByTabTitle)));
+    const searchedSessionIds = Array.from(
+      new Set(matchedIdsBySessionName.concat(matchedIdsByTabTitle))
+    );
     this.setState({ searchedSessionIds: searchedSessionIds });
     log.info(logDir, "=>searchSessions()", searchedSessionIds);
   };
@@ -573,7 +595,8 @@ export default class PopupPage extends Component {
       const editedSession = deleteWindow(session, winId);
       await sendSessionUpdateMessage(editedSession);
 
-      if (this.state.trackingSessions.includes(session.id)) sendEndTrackingByWindowDeleteMessage(session.id, winId);
+      if (this.state.trackingSessions.includes(session.id))
+        sendEndTrackingByWindowDeleteMessage(session.id, winId);
 
       this.openNotification({
         message: browser.i18n.getMessage("sessionWindowDeletedLabel"),
@@ -589,9 +612,23 @@ export default class PopupPage extends Component {
     }
   };
 
-  reorderTab = async (session, sourceWindowId, targetWindowId, tabId, anchorTabId, position = "before") => {
+  reorderTab = async (
+    session,
+    sourceWindowId,
+    targetWindowId,
+    tabId,
+    anchorTabId,
+    position = "before"
+  ) => {
     try {
-      const updatedSession = reorderSessionTab(session, sourceWindowId, targetWindowId, tabId, anchorTabId, position);
+      const updatedSession = reorderSessionTab(
+        session,
+        sourceWindowId,
+        targetWindowId,
+        tabId,
+        anchorTabId,
+        position
+      );
       await sendSessionUpdateMessage(updatedSession);
     } catch (error) {
       this.openNotification({
@@ -737,8 +774,11 @@ export default class PopupPage extends Component {
           <div className="column">
             <SessionDetailsArea
               session={this.state.selectedSession}
-              searchWords={this.state.searchedSessionIds.includes(this.state.selectedSession.id) ?
-                this.state.searchWords : []}
+              searchWords={
+                this.state.searchedSessionIds.includes(this.state.selectedSession.id)
+                  ? this.state.searchWords
+                  : []
+              }
               tagList={this.state.tagList}
               isTracking={this.state.trackingSessions.includes(this.state.selectedSession.id)}
               removeSession={this.removeSession}

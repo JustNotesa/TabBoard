@@ -22,7 +22,9 @@ export default async function exportSessions(id = null, folderName = "", isBacku
   const chunkSize = Math.ceil(sessionsStringSize / MAX_FILE_SIZE);
   const chunkSessions = [];
   for (let i = 0; i < chunkSize; i++) {
-    chunkSessions.push(sessions.slice(i * sessions.length / chunkSize, (i + 1) * sessions.length / chunkSize));
+    chunkSessions.push(
+      sessions.slice((i * sessions.length) / chunkSize, ((i + 1) * sessions.length) / chunkSize)
+    );
   }
 
   for (const [index, chunkSession] of chunkSessions.entries()) {
@@ -33,7 +35,7 @@ export default async function exportSessions(id = null, folderName = "", isBacku
     const downloadId = await browser.downloads
       .download({
         url: downloadUrl,
-        filename: `${replacedFolderName}${fileName}${index > 0 ? '_' + index : ''}.json`,
+        filename: `${replacedFolderName}${fileName}${index > 0 ? "_" + index : ""}.json`,
         conflictAction: isBackup ? "overwrite" : "uniquify",
         saveAs: !isBackup
       })
@@ -113,8 +115,7 @@ function generateFileName(sessions, isBackup) {
     const dateText = moment(sessions[0].date).format(getSettings("dateFormat"));
     if (isBackup) fileName = `${dateText} - ${sessions[0].name} ${tagsText} - [${sessions[0].id}]`;
     else fileName = `${sessions[0].name} ${tagsText} - ${dateText}`;
-  }
-  else {
+  } else {
     const sessionLabel = browser.i18n.getMessage("sessionLabel");
     const sessionsLabel = browser.i18n.getMessage("sessionsLabel");
     const sessionsCount = `${sessions.length} ${sessions.length === 1 ? sessionLabel : sessionsLabel}`;
@@ -149,7 +150,7 @@ function replaceFolderName(folderName) {
 // バックアップ開始からダウンロード完了までの間にServiceWorkerは停止しない想定
 let downloadRecords = {};
 
-export const handleDownloadsChanged = async (status) => {
+export const handleDownloadsChanged = async status => {
   await init();
   const downloadUrl = downloadRecords[status.id]?.downloadUrl;
   if (!downloadUrl) return;
@@ -165,7 +166,7 @@ const recordDownloadUrl = (downloadId, downloadUrl, isBackup) => {
   downloadRecords[downloadId] = { downloadUrl, isBackup };
 };
 
-const revokeDownloadUrl = async (downloadId) => {
+const revokeDownloadUrl = async downloadId => {
   const { downloadUrl, isBackup } = downloadRecords[downloadId];
   if (isBackup) browser.downloads.erase({ id: downloadId });
   revokeObjectURL(downloadUrl);
@@ -183,7 +184,7 @@ const revokeObjectURL = downloadUrl => {
   }
 };
 
-const createObjectURL = async (sessions) => {
+const createObjectURL = async sessions => {
   if (URL?.createObjectURL) {
     return URL.createObjectURL(
       new Blob([JSON.stringify(sessions, null, "  ")], {
@@ -193,14 +194,14 @@ const createObjectURL = async (sessions) => {
   } else {
     // ChromeのServiceWorkerではURL.createObjectURLが利用できないため、offscreen経由で生成する
     const existingContexts = await browser.runtime.getContexts({
-      contextTypes: ['OFFSCREEN_DOCUMENT'],
+      contextTypes: ["OFFSCREEN_DOCUMENT"],
       documentUrls: [browser.runtime.getURL("offscreen/index.html")]
     });
     if (existingContexts == 0) {
       await browser.offscreen.createDocument({
         url: "offscreen/index.html",
         reasons: ["BLOBS"],
-        justification: 'Use URL.createObjectURL',
+        justification: "Use URL.createObjectURL"
       });
     }
 

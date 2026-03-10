@@ -40,33 +40,13 @@ export default props => {
         type={"none"}
       />
       <hr />
-      <OptionsContainer
-        title={"donationLabel"}
-        captions={["donationCaptionLabel"]}
-        type={"none"}
-      />
-      <OptionsContainer
-        title={""}
-        captions={["forkSupportNotice"]}
-        type={"none"}
-      />
-      <OptionsContainer
-        title={""}
-        captions={["forkContactNotice"]}
-        type={"none"}
-      />
+      <OptionsContainer title={"donationLabel"} captions={["donationCaptionLabel"]} type={"none"} />
+      <OptionsContainer title={""} captions={["forkSupportNotice"]} type={"none"} />
+      <OptionsContainer title={""} captions={["forkContactNotice"]} type={"none"} />
       <hr />
-      <OptionsContainer
-        title={"sponsorsLabel"}
-        captions={["forkSponsorNotice"]}
-        type={"none"}
-      />
+      <OptionsContainer title={"sponsorsLabel"} captions={["forkSponsorNotice"]} type={"none"} />
       <hr />
-      <OptionsContainer
-        title={""}
-        captions={["forkLinksNotice"]}
-        type={"none"}
-      />
+      <OptionsContainer title={""} captions={["forkLinksNotice"]} type={"none"} />
     </div>
   );
 };

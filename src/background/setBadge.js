@@ -16,7 +16,8 @@ export const showBadge = (text, backgroundColor, textColor = "#fff") => {
   if (!actionApi) return;
   actionApi.setBadgeBackgroundColor({ color: backgroundColor });
   const isEnableSetTextColor = browserInfo().name == "Firefox" && browserInfo().version >= 63;
-  if (isEnableSetTextColor && actionApi.setBadgeTextColor) actionApi.setBadgeTextColor({ color: textColor });
+  if (isEnableSetTextColor && actionApi.setBadgeTextColor)
+    actionApi.setBadgeTextColor({ color: textColor });
   actionApi.setBadgeText({ text: text });
 };
 

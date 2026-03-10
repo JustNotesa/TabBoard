@@ -69,7 +69,9 @@ function getCopyLabel() {
   if (copyLabelCache !== null) {
     return copyLabelCache;
   }
-  const api = (globalThis.browser && globalThis.browser.i18n) || (globalThis.chrome && globalThis.chrome.i18n);
+  const api =
+    (globalThis.browser && globalThis.browser.i18n) ||
+    (globalThis.chrome && globalThis.chrome.i18n);
   let label = "";
   if (api && typeof api.getMessage === "function") {
     try {
@@ -90,8 +92,10 @@ function isCopyButton(element) {
   if (!label) {
     return false;
   }
-  return normalizeLabel(element.getAttribute("title")) === label ||
-    normalizeLabel(element.getAttribute("aria-label")) === label;
+  return (
+    normalizeLabel(element.getAttribute("title")) === label ||
+    normalizeLabel(element.getAttribute("aria-label")) === label
+  );
 }
 
 function showCopyFeedback(button) {

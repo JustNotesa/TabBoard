@@ -4,7 +4,9 @@ import { getSettings, setSettings, DEFAULT_BACKUP_FOLDER } from "src/settings/se
 import "../styles/BackupRecoveryModal.scss";
 
 export default function BackupRecoveryModal({ closeModal }) {
-  const [folderName, setFolderName] = useState(getSettings("backupFolder") || DEFAULT_BACKUP_FOLDER);
+  const [folderName, setFolderName] = useState(
+    getSettings("backupFolder") || DEFAULT_BACKUP_FOLDER
+  );
   const [enableBackup, setEnableBackup] = useState(
     getSettings("shouldPromptBackupFolder") !== false ? true : getSettings("ifBackup") === true
   );
@@ -32,7 +34,10 @@ export default function BackupRecoveryModal({ closeModal }) {
 
   const handleOpenImport = async () => {
     await setSettings("shouldPromptBackupFolder", false);
-    await browser.tabs.create({ url: browser.runtime.getURL("options/index.html#sessions"), active: true });
+    await browser.tabs.create({
+      url: browser.runtime.getURL("options/index.html#sessions"),
+      active: true
+    });
     window.close();
   };
 

@@ -32,7 +32,11 @@ export default class SessionDetailsArea extends Component {
   handleMenuClick = e => {
     const rect = e.target.getBoundingClientRect();
     const { x, y } = { x: e.pageX || rect.x, y: e.pageY || rect.y };
-    this.props.openMenu(x, y, <SessionMenuItems session={this.props.session} isTracking={this.props.isTracking} />);
+    this.props.openMenu(
+      x,
+      y,
+      <SessionMenuItems session={this.props.session} isTracking={this.props.isTracking} />
+    );
   };
 
   handleOpenClick = () => {
@@ -61,7 +65,8 @@ export default class SessionDetailsArea extends Component {
   };
 
   handleHideThumbnailTextInput = event => {
-    if (this.props.onHideThumbnailTextChange) this.props.onHideThumbnailTextChange(event.target.checked);
+    if (this.props.onHideThumbnailTextChange)
+      this.props.onHideThumbnailTextChange(event.target.checked);
   };
 
   shouldComponentUpdate(nextProps) {
@@ -144,10 +149,12 @@ export default class SessionDetailsArea extends Component {
             </span>
 
             <div className="buttonsContainer">
-              <button className="open"
+              <button
+                className="open"
                 onClick={this.handleOpenClick}
                 onContextMenu={this.handleOpenRightClick}
-                title={getOpenButtonTitle()}>
+                title={getOpenButtonTitle()}
+              >
                 <NewWindowIcon />
                 <span>{browser.i18n.getMessage("open")}</span>
               </button>
@@ -178,7 +185,10 @@ export default class SessionDetailsArea extends Component {
           {viewMode === "grid" && (
             <>
               <label className="thumbnailSizeControl">
-                <span>{browser.i18n.getMessage("thumbnailColumnsLabel") || browser.i18n.getMessage("thumbnailSizeLabel")}</span>
+                <span>
+                  {browser.i18n.getMessage("thumbnailColumnsLabel") ||
+                    browser.i18n.getMessage("thumbnailSizeLabel")}
+                </span>
                 <input
                   type="range"
                   min="1"
@@ -190,7 +200,8 @@ export default class SessionDetailsArea extends Component {
                 <span className="thumbnailSizeValue">
                   {thumbnailSize === 1
                     ? browser.i18n.getMessage("thumbnailSingleColumnValue") || `${thumbnailSize}`
-                    : browser.i18n.getMessage("thumbnailColumnCountValue", [`${thumbnailSize}`]) || `${thumbnailSize}`}
+                    : browser.i18n.getMessage("thumbnailColumnCountValue", [`${thumbnailSize}`]) ||
+                      `${thumbnailSize}`}
                 </span>
               </label>
               <label className="thumbnailTextToggle">

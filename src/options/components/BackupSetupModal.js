@@ -4,13 +4,15 @@ import { getSettings, setSettings, DEFAULT_BACKUP_FOLDER } from "src/settings/se
 import "../styles/BackupSetupModal.scss";
 
 export default function BackupSetupModal({ onClose }) {
-  const [folderName, setFolderName] = useState(getSettings("backupFolder") || DEFAULT_BACKUP_FOLDER);
+  const [folderName, setFolderName] = useState(
+    getSettings("backupFolder") || DEFAULT_BACKUP_FOLDER
+  );
   const [enableBackup, setEnableBackup] = useState(
     getSettings("shouldPromptBackupFolder") !== false ? true : getSettings("ifBackup") === true
   );
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     if (isSaving) return;
     setIsSaving(true);
@@ -42,7 +44,9 @@ export default function BackupSetupModal({ onClose }) {
       <form className="backupSetupModal" onSubmit={handleSubmit}>
         <div className="modalHeader">
           <h2>{browser.i18n.getMessage("backupLabel")}</h2>
-          <button type="button" className="closeButton" onClick={handleSkip}>×</button>
+          <button type="button" className="closeButton" onClick={handleSkip}>
+            ×
+          </button>
         </div>
         <p>{browser.i18n.getMessage("ifBackupCaptionLabel")}</p>
         <p className="folderHint">{browser.i18n.getMessage("backupFolderHintLabel")}</p>
@@ -51,7 +55,7 @@ export default function BackupSetupModal({ onClose }) {
           <input
             type="text"
             value={folderName}
-            onChange={(event) => setFolderName(event.target.value)}
+            onChange={event => setFolderName(event.target.value)}
             placeholder={DEFAULT_BACKUP_FOLDER}
           />
         </label>
@@ -59,7 +63,7 @@ export default function BackupSetupModal({ onClose }) {
           <input
             type="checkbox"
             checked={enableBackup}
-            onChange={(event) => setEnableBackup(event.target.checked)}
+            onChange={event => setEnableBackup(event.target.checked)}
           />
           <span>{browser.i18n.getMessage("ifBackupLabel")}</span>
         </label>

@@ -122,10 +122,12 @@ const getSettingsIds = () => {
   let settingsIds = [];
   defaultSettings.forEach(category => {
     category.elements.forEach(optionElement => {
-      if (optionElement.id && optionElement.default !== undefined) settingsIds.push(optionElement.id);
+      if (optionElement.id && optionElement.default !== undefined)
+        settingsIds.push(optionElement.id);
       if (optionElement.childElements) {
         optionElement.childElements.forEach(childElement => {
-          if (childElement.id && childElement.default !== undefined) settingsIds.push(childElement.id);
+          if (childElement.id && childElement.default !== undefined)
+            settingsIds.push(childElement.id);
         });
       }
     });
@@ -144,11 +146,12 @@ const loadBackupSyncSettings = async () => {
   }
 };
 
-const syncBackupFolder = async (folderValue) => {
+const syncBackupFolder = async folderValue => {
   if (!browser?.storage?.sync) return;
-  const sanitized = typeof folderValue === "string" && folderValue.trim() !== ""
-    ? folderValue
-    : DEFAULT_BACKUP_FOLDER;
+  const sanitized =
+    typeof folderValue === "string" && folderValue.trim() !== ""
+      ? folderValue
+      : DEFAULT_BACKUP_FOLDER;
   try {
     await browser.storage.sync.set({ backupFolder: sanitized });
   } catch (e) {
@@ -156,7 +159,7 @@ const syncBackupFolder = async (folderValue) => {
   }
 };
 
-const syncIfBackup = async (value) => {
+const syncIfBackup = async value => {
   if (!browser?.storage?.sync) return;
   try {
     await browser.storage.sync.set({ ifBackup: !!value });
