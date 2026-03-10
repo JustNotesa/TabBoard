@@ -14,7 +14,13 @@ import {
 import Sessions from "./sessions";
 import { replacePage } from "./replace";
 import importSessions from "./import";
-import { backupSessions, resetLastBackupTime, setupScheduledBackup, runScheduledBackup, trackManualSave } from "./backup";
+import {
+  backupSessions,
+  resetLastBackupTime,
+  setupScheduledBackup,
+  runScheduledBackup,
+  trackManualSave
+} from "./backup";
 import {
   loadCurrentSession,
   saveCurrentSession,
@@ -159,9 +165,14 @@ const onMessageListener = async (request, sender, sendResponse) => {
       };
     }
     case "captureLiveTabAssets":
-      return await captureAssetsForLiveTab(request.sessionId, request.tabId, request.overrideTabId, {
-        thumbnailSource: request.thumbnailSource
-      });
+      return await captureAssetsForLiveTab(
+        request.sessionId,
+        request.tabId,
+        request.overrideTabId,
+        {
+          thumbnailSource: request.thumbnailSource
+        }
+      );
     case "addTag": {
       const beforeSession = await getSessions(request.id);
       const afterSession = await addTag(request.id, request.tag);
@@ -170,14 +181,16 @@ const onMessageListener = async (request, sender, sendResponse) => {
     }
     case "removeTag": {
       const beforeSession = await getSessions(request.id);
-      const afterSession = removeTag(request.id, request.tag);
+      const afterSession = await removeTag(request.id, request.tag);
       recordChange(beforeSession, afterSession);
       break;
     }
     case "getInitState":
       return IsInit;
     case "getCurrentSession":
-      const currentSession = await loadCurrentSession("", [], request.property, { captureAssets: false }).catch(() => { });
+      const currentSession = await loadCurrentSession("", [], request.property, {
+        captureAssets: false
+      }).catch(() => {});
       return currentSession;
     case "signInGoogle":
       return await signInGoogle();
@@ -192,9 +205,15 @@ const onMessageListener = async (request, sender, sendResponse) => {
     case "getsearchInfo":
       return await getsearchInfo();
     case "requestAllSessions": {
-      const sendResponse = (sessions, isEnd) => browser.runtime.sendMessage({
-        message: "responseAllSessions", sessions: sessions, isEnd: isEnd, port: request.port
-      }).catch(() => { });
+      const sendResponse = (sessions, isEnd) =>
+        browser.runtime
+          .sendMessage({
+            message: "responseAllSessions",
+            sessions: sessions,
+            isEnd: isEnd,
+            port: request.port
+          })
+          .catch(() => {});
       return Sessions.getAllWithStream(sendResponse, request.needKeys, request.count);
     }
     case "undo":
@@ -204,11 +223,14 @@ const onMessageListener = async (request, sender, sendResponse) => {
     case "updateUndoStatus":
       return updateUndoStatus();
     case "compressAllSessions": {
-      const sendResponse = (status) => browser.runtime.sendMessage({
-        message: "updateCompressStatus",
-        status: status,
-        port: request.port
-      }).catch(() => { });
+      const sendResponse = status =>
+        browser.runtime
+          .sendMessage({
+            message: "updateCompressStatus",
+            status: status,
+            port: request.port
+          })
+          .catch(() => {});
       return compressAllSessions(sendResponse);
     }
     case "updateTrackingStatus":
@@ -229,7 +251,7 @@ const onMessageListener = async (request, sender, sendResponse) => {
 const handleReplace = async () => {
   await init();
   replacePage();
-}
+};
 
 const onChangeStorageListener = async (changes, areaName) => {
   await init();
@@ -237,9 +259,9 @@ const onChangeStorageListener = async (changes, areaName) => {
   setAutoSave(changes, areaName);
   updateLogLevel();
   await resetLastBackupTime(changes);
-}
+};
 
-const onAlarmListener = async (alarmInfo) => {
+const onAlarmListener = async alarmInfo => {
   await init();
   log.info(logDir, "onAlarmListener()", alarmInfo);
   switch (alarmInfo.name) {
@@ -250,7 +272,7 @@ const onAlarmListener = async (alarmInfo) => {
     case "scheduledBackup":
       return runScheduledBackup();
   }
-}
+};
 
 browser.runtime.onStartup.addListener(onStartupListener);
 browser.runtime.onInstalled.addListener(onInstalledListener);

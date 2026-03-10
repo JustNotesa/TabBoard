@@ -171,6 +171,15 @@ export default [
             min: 1,
             placeholder: 10,
             default: 10
+          },
+          {
+            id: "autoSaveWhenCloseMinTabs",
+            title: "autoSaveWhenCloseMinTabsLabel",
+            captions: ["autoSaveWhenCloseMinTabsCaptionLabel"],
+            type: "number",
+            min: 1,
+            placeholder: 1,
+            default: 1
           }
         ]
       },
@@ -244,7 +253,7 @@ export default [
         title: "shouldTrackNewWindowLabel",
         captions: ["shouldTrackNewWindowCaptionLabel"],
         type: "checkbox",
-        default: true,
+        default: true
       }
     ]
   },
@@ -264,7 +273,7 @@ export default [
             title: "individualBackupLabel",
             captions: ["individualBackupCaptionLabel"],
             type: "checkbox",
-            default: true,
+            default: true
           },
           {
             id: "backupFolder",
