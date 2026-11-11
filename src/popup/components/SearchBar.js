@@ -43,6 +43,7 @@ export default class SearchBar extends Component {
             value={this.state.searchWord}
             spellCheck={false}
             placeholder={browser.i18n.getMessage("searchBarPlaceholder")}
+            title={browser.i18n.getMessage("searchSyntaxHint")}
             onChange={this.handleChange}
             onKeyDown={this.handleKeyDown}
             ref={this.props.searchBarRef}

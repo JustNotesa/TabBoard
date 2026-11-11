@@ -31,7 +31,7 @@ import Modal from "./Modal";
 import Error from "./Error";
 import BackupRecoveryModal from "./BackupRecoveryModal";
 import "../styles/PopupPage.scss";
-import { makeSearchInfo } from "../../common/makeSearchInfo";
+import { makeSearchInfo, parseQuery, evaluateSession } from "../../common/search";
 import { initToolbarLayout, disposeToolbarLayout } from "../toolbarLayout";
 
 const THUMBNAIL_COLUMNS_MIN = 1;
@@ -105,6 +105,9 @@ export default class PopupPage extends Component {
       isShowSearchBar: false,
       searchWords: [],
       searchedSessionIds: [],
+      searchText: "",
+      isSearching: false,
+      searchResults: {},
       isInTab: false,
       sidebarWidth: 300,
       viewMode: "list",
@@ -391,7 +394,7 @@ export default class PopupPage extends Component {
       });
 
       const searchInfo = await browser.runtime.sendMessage({ message: "getsearchInfo" });
-      this.setState({ searchInfo: searchInfo });
+      this.setState({ searchInfo: searchInfo }, this.refreshSearch);
     }
   };
 
@@ -452,12 +455,15 @@ export default class PopupPage extends Component {
         break;
       }
     }
-    this.setState({
-      sessions: sessions,
-      searchInfo: searchInfo,
-      selectedSession: selectedSession,
-      needsSync: needsSync
-    });
+    this.setState(
+      {
+        sessions: sessions,
+        searchInfo: searchInfo,
+        selectedSession: selectedSession,
+        needsSync: needsSync
+      },
+      this.refreshSearch
+    );
   };
 
   handleUpdateSyncStatus = request => {
@@ -503,14 +509,14 @@ export default class PopupPage extends Component {
 
   changeSearchWord = (searchWord, isEnter = false) => {
     log.info(logDir, "changeSearchValue()", searchWord);
-    this.searchSessions(searchWord);
+    const { isSearching, searchedSessionIds } = this.searchSessions(searchWord);
     if (isEnter) {
-      const { sessions, sortValue, filterValue, searchWords, searchedSessionIds } = this.state;
+      const { sessions, sortValue, filterValue } = this.state;
       const sortedSessions = getSortedSessions(
         sessions,
         sortValue,
         filterValue,
-        searchWords,
+        isSearching,
         searchedSessionIds
       );
       if (sortedSessions.length === 0) return;
@@ -520,25 +526,45 @@ export default class PopupPage extends Component {
     }
   };
 
-  searchSessions = searchWord => {
-    log.info(logDir, "searchSessions()", searchWord);
-    const searchWords = searchWord.trim().toLowerCase().split(" ");
-    this.setState({ searchWords: searchWords });
-    if (searchWords.length === 0) return;
+  refreshSearch = () => {
+    if (this.state.isSearching) this.searchSessions(this.state.searchText);
+  };
 
-    const matchedIdsBySessionName = this.state.sessions
-      .filter(session => searchWords.every(word => session.name.toLowerCase().includes(word)))
-      .map(session => session.id);
+  searchSessions = searchText => {
+    log.info(logDir, "searchSessions()", searchText);
+    const query = parseQuery(searchText);
+    const searchWords = query.include.map(term => term.text);
 
-    const matchedIdsByTabTitle = this.state.searchInfo
-      .filter(info => searchWords.every(word => info.tabsTitle.includes(word)))
-      .map(info => info.id);
+    if (query.isEmpty) {
+      const emptyResult = {
+        searchText,
+        searchWords: [],
+        isSearching: false,
+        searchedSessionIds: [],
+        searchResults: {}
+      };
+      this.setState(emptyResult);
+      return emptyResult;
+    }
 
-    const searchedSessionIds = Array.from(
-      new Set(matchedIdsBySessionName.concat(matchedIdsByTabTitle))
-    );
-    this.setState({ searchedSessionIds: searchedSessionIds });
+    const infoById = new Map(this.state.searchInfo.map(info => [info.id, info]));
+    const searchResults = {};
+    for (const session of this.state.sessions) {
+      const result = evaluateSession(session.name, infoById.get(session.id), query);
+      if (result) searchResults[session.id] = result;
+    }
+    const searchedSessionIds = Object.keys(searchResults);
+
+    const newState = {
+      searchText,
+      searchWords,
+      isSearching: true,
+      searchedSessionIds,
+      searchResults
+    };
+    this.setState(newState);
     log.info(logDir, "=>searchSessions()", searchedSessionIds);
+    return newState;
   };
 
   selectSession = async id => {
@@ -753,7 +779,9 @@ export default class PopupPage extends Component {
               filterValue={this.state.filterValue}
               sortValue={this.state.sortValue}
               searchWords={this.state.searchWords}
+              isSearching={this.state.isSearching}
               searchedSessionIds={this.state.searchedSessionIds || []}
+              searchResults={this.state.searchResults}
               trackingSessions={this.state.trackingSessions}
               removeSession={this.removeSession}
               selectSession={this.selectSession}
@@ -780,6 +808,7 @@ export default class PopupPage extends Component {
                   ? this.state.searchWords
                   : []
               }
+              searchHits={this.state.searchResults[this.state.selectedSession.id]?.hitKeys || null}
               tagList={this.state.tagList}
               isTracking={this.state.trackingSessions.includes(this.state.selectedSession.id)}
               removeSession={this.removeSession}

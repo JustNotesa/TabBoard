@@ -22,8 +22,8 @@ const matchesFilter = (tags, filterValue) => {
   }
 };
 
-const matchesSearch = (searchWords, sessionId, searchedSessionIds) => {
-  if (searchWords.join() === "") return true;
+const matchesSearch = (isSearching, sessionId, searchedSessionIds) => {
+  if (!isSearching) return true;
   return searchedSessionIds.includes(sessionId);
 };
 
@@ -44,7 +44,7 @@ export const getSortedSessions = (
   sessions,
   sortValue,
   filterValue,
-  searchWords,
+  isSearching,
   searchedSessionIds
 ) => {
   let sortedSessions = sessions.map(session => ({
@@ -57,7 +57,7 @@ export const getSortedSessions = (
   sortedSessions = sortedSessions.filter(
     session =>
       matchesFilter(session.tag, filterValue) &&
-      matchesSearch(searchWords, session.id, searchedSessionIds)
+      matchesSearch(isSearching, session.id, searchedSessionIds)
   );
 
   switch (sortValue) {
@@ -124,18 +124,18 @@ export default class SessionsArea extends Component {
   };
 
   componentDidUpdate() {
-    const { filterValue, sortValue, searchWords, isInitSessions } = this.props;
-    const { prevFilterValue, prevSortValue, prevSearchWords } = this;
+    const { filterValue, sortValue, searchedSessionIds, isInitSessions } = this.props;
+    const { prevFilterValue, prevSortValue, prevSearchedSessionIds } = this;
 
     if (
       filterValue !== prevFilterValue ||
       sortValue !== prevSortValue ||
-      searchWords.join() !== prevSearchWords.join()
+      searchedSessionIds.join() !== (prevSearchedSessionIds || []).join()
     )
       this.scrollTo(0);
     this.prevFilterValue = filterValue;
     this.prevSortValue = sortValue;
-    this.prevSearchWords = searchWords;
+    this.prevSearchedSessionIds = searchedSessionIds;
 
     if (!isInitSessions) {
       const selectedItemTop = ReactDOM.findDOMNode(this.selectedItemRef?.current)?.offsetTop;
@@ -150,7 +150,9 @@ export default class SessionsArea extends Component {
       filterValue,
       sortValue,
       searchWords,
+      isSearching,
       searchedSessionIds,
+      searchResults,
       isInitSessions,
       removeSession,
       error,
@@ -162,7 +164,7 @@ export default class SessionsArea extends Component {
       sessions,
       sortValue,
       filterValue,
-      searchWords,
+      isSearching,
       searchedSessionIds
     );
 
@@ -175,10 +177,10 @@ export default class SessionsArea extends Component {
       isInitSessions &&
       sortedSessions.length === 0 &&
       filterValue == "_displayAll" &&
-      searchWords.join() === "" &&
+      !isSearching &&
       !error.isError;
     const shouldShowNoResultMessage =
-      isInitSessions && sortedSessions.length === 0 && searchWords.join() !== "" && !error.isError;
+      isInitSessions && sortedSessions.length === 0 && isSearching && !error.isError;
 
     return (
       <div
@@ -192,7 +194,7 @@ export default class SessionsArea extends Component {
         {sessions.map(
           session =>
             matchesFilter(session.tag, filterValue) &&
-            matchesSearch(searchWords, session.id, searchedSessionIds) && (
+            matchesSearch(isSearching, session.id, searchedSessionIds) && (
               <SessionItem
                 session={session}
                 isSelected={selectedSessionId === session.id}
@@ -200,6 +202,7 @@ export default class SessionsArea extends Component {
                 ref={selectedSessionId === session.id ? this.selectedItemRef : null}
                 order={sortedSessions.findIndex(sortedSession => sortedSession.id === session.id)}
                 searchWords={searchWords}
+                hitCount={isSearching ? searchResults?.[session.id]?.hitCount || 0 : 0}
                 removeSession={removeSession}
                 handleSessionSelect={this.handleSessionSelect}
                 openMenu={openMenu}

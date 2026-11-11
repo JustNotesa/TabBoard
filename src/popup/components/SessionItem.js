@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import browser from "webextension-polyfill";
 import Highlighter from "react-highlight-words";
+import { findSearchChunks } from "src/common/search";
 import { getSettings } from "src/settings/settings";
 import { sendOpenMessage } from "../actions/controlSessions";
 import { generateTagLabel, generateTagIcon } from "../actions/generateTagLabel";
@@ -50,7 +51,8 @@ export default class Session extends Component {
   }
 
   render() {
-    const { session, isSelected, isTracking, order, searchWords, handleSessionSelect } = this.props;
+    const { session, isSelected, isTracking, order, searchWords, hitCount, handleSessionSelect } =
+      this.props;
 
     return (
       <div
@@ -64,13 +66,25 @@ export default class Session extends Component {
           onContextMenu={this.handleSessionRightClick}
           ref={this.sessionItemElement}
         >
-          <span className={`name ${getSettings("truncateTitle") ? "isTruncate" : ""}`}>
+          <span
+            className={`name ${getSettings("truncateTitle") ? "isTruncate" : ""} ${
+              hitCount > 0 ? "hasHitCount" : ""
+            }`}
+          >
             <Highlighter
               searchWords={searchWords}
               textToHighlight={session.name.trim() === "" ? "_" : session.name}
-              autoEscape={true}
+              findChunks={findSearchChunks}
             />
           </span>
+          {hitCount > 0 && (
+            <span
+              className="searchHitCount"
+              title={browser.i18n.getMessage("searchHitCountTitle", [`${hitCount}`])}
+            >
+              {hitCount}
+            </span>
+          )}
           <ul className="tagsContainer">
             {session.tag.map((tag, index) => (
               <li className="tag" key={index}>

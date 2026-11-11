@@ -21,6 +21,24 @@
       &.isTruncate {
         white-space: nowrap;
       }
+      &.hasHitCount {
+        padding-right: 26px;
+      }
+    }
+
+    .searchHitCount {
+      position: absolute;
+      top: 7px;
+      right: 6px;
+      min-width: 18px;
+      padding: 0 5px;
+      box-sizing: border-box;
+      border-radius: 9px;
+      font-size: 11px;
+      line-height: 16px;
+      text-align: center;
+      color: var(--main-bg);
+      background-color: var(--highlight);
     }
 
     .lineContainer {

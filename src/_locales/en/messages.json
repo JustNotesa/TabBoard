@@ -66,7 +66,7 @@
     "message": "Fewest tabs"
   },
   "searchBarPlaceholder": {
-    "message": "Search by session or tab name"
+    "message": "Search sessions, tabs and addresses"
   },
   "search": {
     "message": "Search"
@@ -880,5 +880,20 @@
   },
   "forkLinksNotice": {
     "message": "Store listings for TabBoard - Fork of Tab Session Manager are not yet available; follow the project repository for updates."
+  },
+  "searchSyntaxHint": {
+    "message": "Several words: all must match. \"exact phrase\" in quotes. -word excludes. Umlauts and accents are ignored (muenchen finds München)."
+  },
+  "searchHitsLabel": {
+    "message": "$1 of $2 tabs match"
+  },
+  "searchHitCountTitle": {
+    "message": "$1 matching tabs"
+  },
+  "showAllTabsLabel": {
+    "message": "Show all"
+  },
+  "showMatchingTabsLabel": {
+    "message": "Only matches"
   }
 }

@@ -28,7 +28,21 @@ const getOpenButtonTitle = () => {
   }
 };
 
+const countTabs = session =>
+  Object.values(session.windows || {}).reduce((sum, tabs) => sum + Object.keys(tabs).length, 0);
+
 export default class SessionDetailsArea extends Component {
+  state = { showAllTabs: false };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.session.id !== this.props.session.id && this.state.showAllTabs)
+      this.setState({ showAllTabs: false });
+  }
+
+  toggleShowAllTabs = () => {
+    this.setState(state => ({ showAllTabs: !state.showAllTabs }));
+  };
+
   handleMenuClick = e => {
     const rect = e.target.getBoundingClientRect();
     const { x, y } = { x: e.pageX || rect.x, y: e.pageY || rect.y };
@@ -69,10 +83,12 @@ export default class SessionDetailsArea extends Component {
       this.props.onHideThumbnailTextChange(event.target.checked);
   };
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.showAllTabs !== nextState.showAllTabs) return true;
     const propKeys = [
       "session",
       "searchWords",
+      "searchHits",
       "isTracking",
       "tagList",
       "viewMode",
@@ -91,6 +107,7 @@ export default class SessionDetailsArea extends Component {
     const {
       session,
       searchWords,
+      searchHits,
       isTracking,
       removeWindow,
       removeTab,
@@ -215,9 +232,25 @@ export default class SessionDetailsArea extends Component {
             </>
           )}
         </div>
+        {searchHits && (
+          <div className="searchHitsBar">
+            <span>
+              {browser.i18n.getMessage("searchHitsLabel", [
+                `${searchHits.size}`,
+                `${countTabs(session) || session.tabsNumber || searchHits.size}`
+              ])}
+            </span>
+            <button type="button" onClick={this.toggleShowAllTabs}>
+              {browser.i18n.getMessage(
+                this.state.showAllTabs ? "showMatchingTabsLabel" : "showAllTabsLabel"
+              )}
+            </button>
+          </div>
+        )}
         <DetailsContainer
           session={session}
           searchWords={searchWords}
+          visibleTabKeys={searchHits && !this.state.showAllTabs ? searchHits : null}
           removeWindow={removeWindow}
           removeTab={removeTab}
           openMenu={openMenu}

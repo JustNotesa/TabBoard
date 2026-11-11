@@ -123,9 +123,22 @@
           margin-right: 10px;
           box-sizing: border-box;
           overflow: hidden;
+          .tabText {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+          }
           .tabTitle {
             color: var(--main-text);
             line-height: 1.3em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          .tabUrlHit {
+            font-size: 11px;
+            line-height: 1.3em;
+            color: var(--sub-text);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

@@ -17,6 +17,7 @@ import TabThumbnail from "./TabThumbnail";
 
 import "../styles/DetailsContainer.scss";
 import Highlighter from "react-highlight-words";
+import { findSearchChunks, textMatchesAnyWord } from "src/common/search";
 
 const FavIcon = props => (
   <img
@@ -222,10 +223,16 @@ const TabContainer = props => {
             <Highlighter
               searchWords={searchWords}
               textToHighlight={tab.title || ""}
-              autoEscape={true}
+              findChunks={findSearchChunks}
             />
           </span>
-          <span className="tabUrl">{tab.url}</span>
+          <span className="tabUrl">
+            <Highlighter
+              searchWords={searchWords}
+              textToHighlight={tab.url || ""}
+              findChunks={findSearchChunks}
+            />
+          </span>
         </div>
       </div>
     );
@@ -242,12 +249,23 @@ const TabContainer = props => {
         title={`${tab.title}\n${tab.url}`}
       >
         <FavIcon favIconUrl={tab.favIconUrl} />
-        <span className="tabTitle">
-          <Highlighter
-            searchWords={searchWords}
-            textToHighlight={tab.title || ""}
-            autoEscape={true}
-          />
+        <span className="tabText">
+          <span className="tabTitle">
+            <Highlighter
+              searchWords={searchWords}
+              textToHighlight={tab.title || ""}
+              findChunks={findSearchChunks}
+            />
+          </span>
+          {textMatchesAnyWord(tab.url, searchWords) && (
+            <span className="tabUrlHit">
+              <Highlighter
+                searchWords={searchWords}
+                textToHighlight={tab.url || ""}
+                findChunks={findSearchChunks}
+              />
+            </span>
+          )}
         </span>
       </button>
       <div className="buttonsContainer">
@@ -279,6 +297,7 @@ class WindowContainer extends Component {
       prevProps.viewMode !== this.props.viewMode ||
       prevProps.thumbnailSize !== this.props.thumbnailSize ||
       prevProps.tabs !== this.props.tabs ||
+      prevProps.visibleTabs !== this.props.visibleTabs ||
       prevProps.hideThumbnailText !== this.props.hideThumbnailText
     ) {
       this.updateToolbarSide();
@@ -481,7 +500,9 @@ class WindowContainer extends Component {
       hideThumbnailText,
       handleReorderTab
     } = this.props;
-    const sortedTabs = Object.values(tabs).sort((a, b) => a.index - b.index);
+    const sortedTabs = Object.values(this.props.visibleTabs || tabs).sort(
+      (a, b) => a.index - b.index
+    );
     const isIncognito = Object.values(tabs)[0].incognito;
     const tabsContainerClass = `tabs ${viewMode === "grid" ? "isGrid" : ""}`;
     const tabsStyle =
@@ -552,10 +573,20 @@ class WindowContainer extends Component {
   }
 }
 
+const filterTabs = (tabs, windowId, visibleTabKeys) => {
+  if (!visibleTabKeys) return tabs;
+  const filtered = {};
+  for (const [tabKey, tab] of Object.entries(tabs || {})) {
+    if (visibleTabKeys.has(`${windowId}:${tab?.id ?? tabKey}`)) filtered[tabKey] = tab;
+  }
+  return filtered;
+};
+
 export default props => {
   const {
     session,
     searchWords,
+    visibleTabKeys,
     removeWindow,
     removeTab,
     openMenu,
@@ -585,25 +616,31 @@ export default props => {
 
   return (
     <div className={containerClass}>
-      {Object.keys(session.windows).map(windowId => (
-        <WindowContainer
-          tabs={session.windows[windowId]}
-          windowTitle={session?.windowsInfo?.[windowId]?.title}
-          windowId={windowId}
-          sessionId={session.id}
-          windowsNumber={session.windowsNumber}
-          allTabsNumber={session.tabsNumber}
-          searchWords={searchWords}
-          handleRemoveWindow={handleRemoveWindow}
-          handleRemoveTab={handleRemoveTab}
-          openMenu={openMenu}
-          viewMode={viewMode}
-          thumbnailSize={thumbnailSize}
-          hideThumbnailText={hideThumbnailText}
-          handleReorderTab={handleReorderTab}
-          key={`${session.id}${windowId}`}
-        />
-      ))}
+      {Object.keys(session.windows).map(windowId => {
+        const tabs = session.windows[windowId];
+        const visibleTabs = visibleTabKeys ? filterTabs(tabs, windowId, visibleTabKeys) : null;
+        if (visibleTabs && Object.keys(visibleTabs).length === 0) return null;
+        return (
+          <WindowContainer
+            tabs={tabs}
+            visibleTabs={visibleTabs}
+            windowTitle={session?.windowsInfo?.[windowId]?.title}
+            windowId={windowId}
+            sessionId={session.id}
+            windowsNumber={session.windowsNumber}
+            allTabsNumber={session.tabsNumber}
+            searchWords={searchWords}
+            handleRemoveWindow={handleRemoveWindow}
+            handleRemoveTab={handleRemoveTab}
+            openMenu={openMenu}
+            viewMode={viewMode}
+            thumbnailSize={thumbnailSize}
+            hideThumbnailText={hideThumbnailText}
+            handleReorderTab={handleReorderTab}
+            key={`${session.id}${windowId}`}
+          />
+        );
+      })}
     </div>
   );
 };

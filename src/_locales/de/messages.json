@@ -66,7 +66,7 @@
     "message": "Wenigste Tabs"
   },
   "searchBarPlaceholder": {
-    "message": "Suchen nach Sitzungs- oder Tabnamen"
+    "message": "Sitzungen, Tabs und Adressen durchsuchen"
   },
   "search": {
     "message": "Suchen"
@@ -847,5 +847,20 @@
   },
   "hideThumbnailTextCaptionLabel": {
     "message": "Titel und URL nur beim Überfahren mit der Maus zeigen"
+  },
+  "searchSyntaxHint": {
+    "message": "Mehrere Wörter: alle müssen vorkommen. \"Genaue Wortfolge\" in Anführungszeichen. -wort schließt aus. Umlaute und Akzente sind egal (muenchen findet München)."
+  },
+  "searchHitsLabel": {
+    "message": "$1 von $2 Tabs passen"
+  },
+  "searchHitCountTitle": {
+    "message": "$1 passende Tabs"
+  },
+  "showAllTabsLabel": {
+    "message": "Alle zeigen"
+  },
+  "showMatchingTabsLabel": {
+    "message": "Nur Treffer"
   }
 }
