@@ -8,8 +8,8 @@ export default props => {
   const query = queryString.parse(props.location.search);
 
   const extensionVersion = manifest.version;
-  const releaseLink = "https://github.com/JustNotesa/TabBoard-Fork-of-TabSessionManager/releases";
-  const repoLink = "https://github.com/JustNotesa/TabBoard-Fork-of-TabSessionManager";
+  const releaseLink = "https://addons.mozilla.org/firefox/addon/tabboard/versions/";
+  const repoLink = "https://github.com/JustNotesa/TabBoard";
 
   return (
     <div className="contentsArea">
@@ -27,7 +27,7 @@ export default props => {
             </a>
             <span>　</span>
             <a href={repoLink} target="_blank" rel="noreferrer">
-              {browser.i18n.getMessage("backersLabel")}
+              {browser.i18n.getMessage("sourceCodeLabel")}
             </a>
           </p>
         }

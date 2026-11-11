@@ -758,6 +758,9 @@
   "backersLabel": {
     "message": "Unterstützer/innen"
   },
+  "sourceCodeLabel": {
+    "message": "Quellcode (GitHub)"
+  },
   "LicenseLabel": {
     "message": "Lizenz"
   },
@@ -825,7 +828,7 @@
     "message": "Unterstütze dieses Fork-Projekt direkt per Überweisung (IBAN: DE55500240241771157501)."
   },
   "forkLinksNotice": {
-    "message": "Store listings for TabBoard - Fork of Tab Session Manager are not yet available; follow the project repository for updates."
+    "message": "TabBoard gibt es auf addons.mozilla.org; Quellcode und Neuigkeiten findest du auf GitHub."
   },
   "thumbnailColumnsLabel": {
     "message": "Anzahl Spalten"
