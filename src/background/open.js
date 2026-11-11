@@ -202,7 +202,7 @@ async function createTabs(session, win, currentWindow, isAddtoCurrentWindow = fa
     if (getSettings("ifSupportTst")) await openedTab;
   }
 
-  if (isEnabledTabGroups) {
+  if (isEnabledTabGroups && getSettings("saveTabGroupsV2")) {
     await Promise.all(openedTabs);
     createTabGroups(currentWindow.id, sortedTabs, session.tabGroups || []);
   }

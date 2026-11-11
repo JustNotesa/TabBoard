@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "Numero massimo di sessioni salvate (in questa modalità)."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Minimum number of tabs"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "Salva la sessione all'uscita del browser"
   },
@@ -492,7 +498,7 @@
     "message": "Salva gruppi di schede"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Salva e ripristina lo stato dei gruppi di schede. Per abilitare questa funzione, devi installare la seguente estensione."
+    "message": "Save and restore the state of tab groups."
   },
   "tstDelayCaptionLabel": {
     "message": "Per ripristinare lo stato dell'alberatura, è necessario un tempo d'attesa per aprire la scheda. Aumenta questo valore se l'alberatura non viene ripristinata correttamente."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Scuro"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "Altro"

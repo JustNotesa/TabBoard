@@ -60,10 +60,10 @@
     "message": "Z-A"
   },
   "tabsDesLabel": {
-    "message": "Most tabs"
+    "message": "En çok sekme"
   },
   "tabsAscLabel": {
-    "message": "Fewest tabs"
+    "message": "En az sekme"
   },
   "searchBarPlaceholder": {
     "message": "Oturum veya sekme adına göre ara"
@@ -345,7 +345,7 @@
     "message": "Aralık (dakika)"
   },
   "autoSaveIntervalCaptionLabel": {
-    "message": "Minimum value 0.5"
+    "message": "En küçük değer 0.5 olabilir"
   },
   "autoSaveLimitLabel": {
     "message": "Kaydedilecek en fazla oturum sayısı"
@@ -364,6 +364,12 @@
   },
   "autoSaveWhenCloseCaptionLabel": {
     "message": "Bu yöntemle kaydedilecek en fazla oturum sayısını yazın."
+  },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "En az sekme sayısı"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "Bir pencere kapatıldığında, yalnızca en az bu kadar sekmesi varsa otomatik olarak kaydedilir."
   },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "Tarayıcıdan çıkılırken oturum kaydedilsin"
@@ -492,7 +498,7 @@
     "message": "Sekme gruplarını kaydet"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Sekme gruplarının durumunu kaydeder ve geri yükler. Bu özelliği etkinleştirmek için aşağıdaki eklenti kurulmuş olmalıdır."
+    "message": "Sekme gruplarının durumunu kaydeder ve geri yükler."
   },
   "tstDelayCaptionLabel": {
     "message": "Ağacın durumunu geri yüklemek için sekmeyi açarken bekleme süresi gereklidir. Ağaç düzgün şekilde geri yüklenmezse bu değeri artırın."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Koyu"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "Diğer"

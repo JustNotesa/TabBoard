@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "Número máximo de sessões salvas (desta forma)."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Número mínimo de abas"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "Salvar a sessão ao sair do navegador"
   },
@@ -492,7 +498,7 @@
     "message": "Salvar grupos de aba"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Salvar e restaurar o estado dos grupos de aba. Para ativar esta função, deve instalar a seguinte extensão."
+    "message": "Salvar e restaurar o estado dos grupos de guias."
   },
   "tstDelayCaptionLabel": {
     "message": "Para restaurar o estado da árvore, espere o tempo necessário para abrir a aba. Aumente este valor se a árvore não for restaurada corretamente."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Escuro"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "Outros"

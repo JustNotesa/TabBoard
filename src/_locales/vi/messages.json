@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "Số lượng phiên được lưu lại lớn nhất (bằng cách này)."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Minimum number of tabs"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "Lưu lại phiên khi thoát trình duyệt"
   },
@@ -492,7 +498,7 @@
     "message": "Save tab groups"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Save and restore the state of tab groups. To enable this feature, you need to install the following extension."
+    "message": "Save and restore the state of tab groups."
   },
   "tstDelayCaptionLabel": {
     "message": "Để phục hồi trạng thái của cây, cần có thời gian chờ để mở tab. Tăng thời gian chờ nếu cây không được khôi phục một cách chính xác."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Dark"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "Khác"

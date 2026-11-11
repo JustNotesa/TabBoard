@@ -674,6 +674,9 @@
   "darkLabel": {
     "message": "Dark"
   },
+  "systemLabel": {
+    "message": "System"
+  },
   "otherLabel": {
     "message": "Other"
   },

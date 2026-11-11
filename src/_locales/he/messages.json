@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "מספר מרבי של פעילויות שנשמרו (בדרך זו)."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Minimum number of tabs"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "שמור את הפעילות בעת סגירת הדפדפן"
   },
@@ -492,7 +498,7 @@
     "message": "Save tab groups"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Save and restore the state of tab groups. To enable this feature, you need to install the following extension."
+    "message": "Save and restore the state of tab groups."
   },
   "tstDelayCaptionLabel": {
     "message": "כדי לשחזר את מצב העץ, נדרש זמן המתנה לפתיחת הכרטיסיה. הגדל ערך זה אם העץ אינו משוחזר כהלכה."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Dark"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "אחר"

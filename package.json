@@ -38,16 +38,16 @@
     "babel-loader": "^8.1.0",
     "buffer": "^6.0.3",
     "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^9.0.1",
+    "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^1.6.0",
+    "prettier": "^3.0.0",
     "sass": "^1.86.0",
     "sass-loader": "^14.2.1",
     "webpack": "^5.88.2",
     "webpack-cli": "^4.8.0",
-    "zip-webpack-plugin": "^4.0.1",
-    "prettier": "^3.0.0"
+    "zip-webpack-plugin": "^4.0.1"
   },
   "scripts": {
     "watch-dev": "webpack --config webpack.config.dev.js --watch",

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "7.3.0",
+  "version": "7.4.0",
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
@@ -13,15 +13,9 @@
     "alarms",
     "offscreen"
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
-  "optional_host_permissions": [
-    "https://www.googleapis.com/*"
-  ],
-  "optional_permissions": [
-    "tabGroups"
-  ],
+  "host_permissions": ["<all_urls>"],
+  "optional_host_permissions": ["https://www.googleapis.com/*"],
+  "optional_permissions": ["tabGroups"],
   "options_ui": {
     "page": "options/index.html",
     "open_in_tab": true

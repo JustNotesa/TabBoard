@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "Az (ilyen módon) elmentett munkamenetek maximális száma."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Minimum number of tabs"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "A munkamenet mentése böngészőből való kilépéskor"
   },
@@ -492,7 +498,7 @@
     "message": "Fül csoportok mentése"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Fül csoportok mentése és visszaállítása. Ennek a képességnek a használatához az alábbi kiegészítőt kell telepítenie."
+    "message": "Save and restore the state of tab groups."
   },
   "tstDelayCaptionLabel": {
     "message": "A fa struktúra visszaállításához, idő szükséges a fül megnyitásánál. Növeld ezt az értéket, ha nem áll vissza rendesen a fa struktúra."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Sötét"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "Egyéb"

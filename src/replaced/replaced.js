@@ -34,7 +34,8 @@ document.head.insertAdjacentHTML(
   "beforeend",
   `<link rel="shortcut icon" href="${sanitaize.encode(parameter.favIconUrl)}">`
 );
-document.body.dataset.theme = parameter.theme || "light";
+const theme = ["light", "dark", "system"].includes(parameter.theme) ? parameter.theme : "light";
+document.body.classList.add(theme + "-theme");
 
 const copy = () => {
   const url = document.querySelector(".replacedUrl");

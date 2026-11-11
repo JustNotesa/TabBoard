@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "සුරැකි සැසි උපරිම ගණන (මේ ආකාරයෙන්)."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Minimum number of tabs"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "බ්‍රවුසරයෙන් පිටවන විට සැසිය සුරකින්න"
   },
@@ -492,7 +498,7 @@
     "message": "ටැබ් කණ්ඩායම් සුරකින්න"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "ටැබ් කණ්ඩායම් වල තත්වය සුරකින්න සහ ප්‍රතිසාධනය කරන්න. මෙම විශේෂාංගය සබල කිරීමට, ඔබ පහත දිගුව ස්ථාපනය කළ යුතුය."
+    "message": "Save and restore the state of tab groups."
   },
   "tstDelayCaptionLabel": {
     "message": "ගසේ තත්වය යථා තත්ත්වයට පත් කිරීම සඳහා, ටැබ් එක විවෘත කිරීමට රැඳී සිටීමට කාලය අවශ්ය වේ. ගස නිවැරදිව ප්රතිෂ්ඨාපනය නොකළහොත් මෙම අගය වැඩි කරන්න."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "අඳුරු"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "වෙනත්"

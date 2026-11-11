@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "7.3.0",
+  "version": "7.4.0",
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
   "default_locale": "en",
@@ -9,9 +9,7 @@
       "id": "tabboard@local",
       "data_collection_permissions": {
         "collects_data": false,
-        "required": [
-          "none"
-        ]
+        "required": ["none"]
       }
     }
   },
@@ -26,9 +24,7 @@
     "alarms",
     "<all_urls>"
   ],
-  "optional_permissions": [
-    "https://www.googleapis.com/*"
-  ],
+  "optional_permissions": ["https://www.googleapis.com/*"],
   "options_ui": {
     "page": "options/index.html",
     "open_in_tab": true
@@ -38,9 +34,7 @@
     "64": "icons/icon.svg"
   },
   "background": {
-    "scripts": [
-      "background/background.js"
-    ],
+    "scripts": ["background/background.js"],
     "persistent": true
   },
   "browser_action": {

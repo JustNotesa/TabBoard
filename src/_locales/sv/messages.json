@@ -365,6 +365,12 @@
   "autoSaveWhenCloseCaptionLabel": {
     "message": "Maximalt antal sparade sessioner (på det här sättet)."
   },
+  "autoSaveWhenCloseMinTabsLabel": {
+    "message": "Minimum number of tabs"
+  },
+  "autoSaveWhenCloseMinTabsCaptionLabel": {
+    "message": "When a window is closed, it will only be saved automatically if it has at least this many tabs."
+  },
   "ifAutoSaveWhenExitBrowserLabel": {
     "message": "Spara sessionen när webbläsaren avslutas"
   },
@@ -492,7 +498,7 @@
     "message": "Spara flikgrupper"
   },
   "saveTabGroupsCaptionLabel": {
-    "message": "Spara och återställ läget för flikgrupper. För att aktivera den här funktionen måste du installera följande tillägg."
+    "message": "Spara och återställ läget för flikgrupper."
   },
   "tstDelayCaptionLabel": {
     "message": "För att återställa trädet krävs det väntetid innan fliken öppnas. Höj värdet om trädet inte återställs korrekt."
@@ -601,6 +607,9 @@
   },
   "darkLabel": {
     "message": "Mörkt"
+  },
+  "systemLabel": {
+    "message": "System"
   },
   "otherLabel": {
     "message": "Annat"
